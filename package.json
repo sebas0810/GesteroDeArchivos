@@ -1,0 +1,22 @@
+{
+  "name": "gesterodearchivos",
+  "version": "1.0.0",
+  "description": "Gestor de archivos para materia de SO",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sebas0810/GesteroDeArchivos.git"
+  },
+  "author": "Sebastian Lopez Restrepo--Nicolas Cardona",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sebas0810/GesteroDeArchivos/issues"
+  },
+  "homepage": "https://github.com/sebas0810/GesteroDeArchivos#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
