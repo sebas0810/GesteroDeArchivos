@@ -21,9 +21,21 @@ app.get('/', (req,res) =>{
       console.log('Stderror:'+ stderror.menssage);
       return;
     }
-    console.log(stdout);
+    let archivosList = stdout.split('\n');
+    archivosList = archivosList.slice(1,archivosList.length-1);
+    let resultadoJ = [];
+    for (var i = 0; i < archivosList.length; i++) {
+      let archivo = archivosList[i].split(' ');
+      resultadoJ.push({
+        permisos : archivo[0].slice(''),
+        tipo : archivo[0].split('')[0],
+        propietario : archivo[2],
+        nombre : archivo[archivo.length-1]
+      });
+    }
+    //console.log(resultadoJ);
   });
-  res.sendFile(path.join(__dirname,'/views/home.html'));
+  res.json(resultadoJ);
 });
 
 app.listen(8000, (req,res) => {
