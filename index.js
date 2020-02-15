@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
-const { exec } = require("child_process");
+const { exec, execSync } = require("child_process");
 const morgan = require("morgan");
 const app = express();
 
