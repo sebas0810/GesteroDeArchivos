@@ -5,6 +5,10 @@ window.addEventListener("load", () => {
     const tabla = document.querySelector(".info-table");
     tabla.innerHTML = "";
 
+    // Cambiamos el titulo de la carpeta actual
+    const tituloCarpeta = document.querySelector(".folder-name");
+    tituloCarpeta.innerText = "public";
+
     // Renderiza tantas filas como archivos hayan
     archivos.map(archivo => {
       renderizarInfo(archivo);
