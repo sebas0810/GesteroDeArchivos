@@ -1,13 +1,13 @@
 // Espera a que el documento se cargue para ejecutar el callback
 window.addEventListener("load", () => {
-  traerArchivos("home/nicolas/").then(archivos => {
+  traerArchivos("home/").then(archivos => {
     // Borra toda la info residual
     const tabla = document.querySelector(".info-table");
     tabla.innerHTML = "";
 
     // Cambiamos el titulo de la carpeta actual
     const tituloCarpeta = document.querySelector(".folder-name");
-    tituloCarpeta.innerText = "home/nicolas/";
+    tituloCarpeta.innerText = "home/";
 
     // Renderiza tantas filas como archivos hayan
     archivos.map(archivo => {
@@ -24,9 +24,13 @@ function traerArchivos(directorio) {
 
 function renderizarInfo(archivo) {
   const tabla = document.querySelector(".info-table");
-  const { permisos, tipo, propietario, nombre } = archivo;
+  let { permisos, tipo, propietario, nombre } = archivo;
 
   const fila = document.createElement("tr");
+
+  // Si el archivo es de tipo directorio lo coloca como un boton
+  nombre =
+    tipo === "d" ? `<button class="move-dir">${nombre}</button>` : nombre;
 
   const info = `
     <td>${nombre}</td>
