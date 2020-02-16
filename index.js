@@ -1,41 +1,26 @@
 const express = require("express");
-const path = require("path");
-const fs = require("fs");
-const { exec, execSync } = require("child_process");
 const morgan = require("morgan");
+const path = require("path");
 const app = express();
 
-app.use(morgan("dev"));
+app.set('port', process.env.PORT || 3000)
+
+const inicio = require('./root/index.routes')
+ //middleware
 app.use(express.json());
+app.use(morgan("dev"));
+app.use(express.urlencoded({ extended: false }))
 
-app.use(express.static(path.join(__dirname, "views")));
+app.use(inicio);
 
-app.get("/", (req, res) => {
-  const directorio = path.join(__dirname, "public");
+//app.use('view engine', 'ejs');
+app.set('views', __dirname + '/public');
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+app.use(express.static(path.join(__dirname, "public")));
 
-  // metodo syncrono que espera a que sea completa para seguir
-  const comando = execSync("ls -l", { cwd: directorio }).toString();
+app.get('*', (req, res) => res.sendFile(path.join(__dirname+'/public/index.html')));
 
-  let listaArchivos = comando.split("\n");
-  listaArchivos = listaArchivos.slice(1, listaArchivos.length - 1);
-
-  let infoArchivos = [];
-
-  for (var i = 0; i < listaArchivos.length; i++) {
-    let archivo = listaArchivos[i].split(" ");
-
-    const infoArchivo = {
-      permisos: archivo[0].slice(""),
-      tipo: archivo[0].split("")[0],
-      propietario: archivo[2],
-      nombre: archivo[archivo.length - 1]
-    };
-
-    infoArchivos.push(infoArchivo);
-  }
-  res.json(infoArchivos);
-});
-
-app.listen(8000, (req, res) => {
-  console.log("Servidor en puerto " + 8000);
+app.listen(app.get('port'), () => {
+    console.log(`server on port ${app.get('port')}`);
 });
