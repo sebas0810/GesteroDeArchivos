@@ -20,13 +20,14 @@ app.use((request, response, next) => {
 
 app.use(express.static(path.join(__dirname, "views")));
 
-app.get("/", (req, res) => {
-  const directorio = path.join(__dirname, "public");
+app.get("/:id", (req, res) => {
+  console.log(req.params.id);
+  const directorio = path.join(__dirname, req.params.id);
 
   // metodo syncrono que espera a que sea completa para seguir
-  const comando = execSync("ls -l", { cwd: directorio }).toString();
+  const resultado = execSync("ls -l", { cwd: directorio }).toString();
 
-  let listaArchivos = comando.split("\n");
+  let listaArchivos = resultado.split("\n");
   listaArchivos = listaArchivos.slice(1, listaArchivos.length - 1);
 
   let infoArchivos = [];
