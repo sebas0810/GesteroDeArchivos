@@ -1,14 +1,19 @@
 // Espera a que el documento se cargue para ejecutar el callback
 window.addEventListener("load", () => {
-  traerArchivos("http://localhost:8000/").then(archivos =>
+  traerArchivos("public").then(archivos => {
+    // Borra toda la info residual
+    const tabla = document.querySelector(".info-table");
+    tabla.innerHTML = "";
+
+    // Renderiza tantas filas como archivos hayan
     archivos.map(archivo => {
       renderizarInfo(archivo);
-    })
-  );
+    });
+  });
 });
 
-function traerArchivos(enlance) {
-  return fetch(enlance)
+function traerArchivos(directorio) {
+  return fetch(`http://localhost:8000/${directorio}`)
     .then(response => response.json())
     .then(data => data);
 }
