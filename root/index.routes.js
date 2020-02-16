@@ -7,12 +7,14 @@ router.get('/carpeta' , (req,res)=>{
   const directorio = path.join(__dirname, "public");
   console.log('Entre '+ directorio);
   // metodo syncrono que espera a que sea completa para seguir
-  const comando = execSync("ls -l", { cwd: directorio }, (error,stdout, stderr) =>{
+  exec("ls -l", { cwd: '/home/sebastianlopez/'}, (error,stdout, stderr) =>{
     if(error){
+      console.log("Errorsote");
       console.log("Error: "+error);
       return
     }
     if(stderr){
+      console.log("stderr");
       console.log("Error: "+error);
       return
     }
@@ -30,10 +32,10 @@ router.get('/carpeta' , (req,res)=>{
         propietario: archivo[2],
         nombre: archivo[archivo.length - 1]
       };
-      infoArchivos.push(infoArchivo);
+      infoArchivos.push(JSON.stringify(infoArchivo));
   }
-    console.log(infoArchivos);
-    res.json(infoArchivo)
+    //console.log(infoArchivos);
+    res.json(infoArchivos)
   });
 })
 
