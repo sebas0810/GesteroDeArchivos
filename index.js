@@ -20,9 +20,9 @@ app.use((request, response, next) => {
 
 app.use(express.static(path.join(__dirname, "views")));
 
-app.get("/:id", (req, res) => {
-  console.log(req.params.id);
-  const directorio = path.join(__dirname, req.params.id);
+app.get("/files", (req, res) => {
+  console.log(req.query);
+  const directorio = path.join(__dirname, req.query.directory);
 
   // metodo syncrono que espera a que sea completa para seguir
   const resultado = execSync("ls -l", { cwd: directorio }).toString();

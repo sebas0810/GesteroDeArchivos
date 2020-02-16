@@ -1,13 +1,13 @@
 // Espera a que el documento se cargue para ejecutar el callback
 window.addEventListener("load", () => {
-  traerArchivos("public").then(archivos => {
+  traerArchivos("home/nicolas/").then(archivos => {
     // Borra toda la info residual
     const tabla = document.querySelector(".info-table");
     tabla.innerHTML = "";
 
     // Cambiamos el titulo de la carpeta actual
     const tituloCarpeta = document.querySelector(".folder-name");
-    tituloCarpeta.innerText = "public";
+    tituloCarpeta.innerText = "home/nicolas/";
 
     // Renderiza tantas filas como archivos hayan
     archivos.map(archivo => {
@@ -17,7 +17,7 @@ window.addEventListener("load", () => {
 });
 
 function traerArchivos(directorio) {
-  return fetch(`http://localhost:8000/${directorio}`)
+  return fetch(`http://localhost:8000/files?directory=${directorio}`)
     .then(response => response.json())
     .then(data => data);
 }
