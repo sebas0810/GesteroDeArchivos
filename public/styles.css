@@ -18,7 +18,7 @@ body {
   box-shadow: var(--black-shadow);
 }
 
-.folder-name {
+.table-header {
   background: linear-gradient(60deg, #ab47bc, #8e24aa);
   color: white;
   box-shadow: var(--black-shadow);

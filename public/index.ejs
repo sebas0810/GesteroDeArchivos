@@ -12,7 +12,10 @@
   </head>
   <body>
     <div class="container">
-      <h4 class="folder-name">Nombre de la carpeta</h4>
+      <div class="table-header">
+        <h4 class="folder-name"></h4>
+        <button class="go-back">Ir atras</button>
+      </div>
       <table class="files">
         <thead>
           <tr>
@@ -22,17 +25,9 @@
             <th>Permisos</th>
           </tr>
         </thead>
-        <tbody class="imfo-table">
-          <% for(var file of archivos ) { %>
-            <tr>
-              <td><%= file.nombre %></td>
-              <td><%= file.tipo %></td>
-              <td><%= file.propietario %></td>
-              <td><%= file.permisos %></td>
-            </tr>
-          <%}%>
-        </tbody>
+        <tbody class="info-table"></tbody>
       </table>
     </div>
+    <script src="main.js"></script>
   </body>
 </html>
