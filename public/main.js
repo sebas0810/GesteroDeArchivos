@@ -3,6 +3,7 @@ window.addEventListener("load", () => {
   cambioDirectorio("home");
 });
 
+// Funciones
 function traerArchivos(directorio) {
   return fetch(`http://localhost:8000/files?directory=${directorio}`)
     .then(response => response.json())
@@ -10,12 +11,22 @@ function traerArchivos(directorio) {
 }
 
 function crearArchivo(directorio, nombreArchivo) {
-  return fetch(
+  fetch(
     `http://localhost:8000/createFile?directory=${directorio}&name=${nombreArchivo}`
   )
     .then(response => response.json())
     .then(data => data);
 }
+
+function crearCarpeta(directorio, nombreCarpeta) {
+  fetch(
+    `http://localhost:8000/createFolder?directory=${directorio}&name=${nombreCarpeta}`
+  )
+    .then(response => response.json())
+    .then(data => data);
+}
+
+// Escuchadores de eventos
 
 // Evento click que activa la opción de crear un archivo
 document.querySelector(".create-file").addEventListener("click", event => {
@@ -23,6 +34,13 @@ document.querySelector(".create-file").addEventListener("click", event => {
   const nombreArchivo = document.querySelector(".filename").value;
 
   crearArchivo(directorio, nombreArchivo);
+});
+
+document.querySelector(".create-folder").addEventListener("click", event => {
+  const directorio = document.querySelector(".folder-name").textContent;
+  const nombreCarpeta = document.querySelector(".foldername").value;
+
+  crearCarpeta(directorio, nombreCarpeta);
 });
 
 // Evento click cambio de directorios

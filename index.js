@@ -54,6 +54,13 @@ app.get("/createFile", (req, res) => {
   execSync(`touch ${nombreArchivo}`, { cwd: directorio });
 });
 
+app.get("/createFolder", (req, res) => {
+  const directorio = path.join(__dirname, req.query.directory);
+  const nombreCarpeta = req.query.name;
+
+  execSync(`mkdir ${nombreCarpeta}`, { cwd: directorio });
+});
+
 app.listen(8000, (req, res) => {
   console.log("Servidor en puerto " + 8000);
 });
