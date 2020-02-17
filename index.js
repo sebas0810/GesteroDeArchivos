@@ -21,6 +21,7 @@ app.use((request, response, next) => {
 
 app.use(express.static(path.join(__dirname, "views")));
 
+
 app.get("/files", (req, res) => {
   const directorio = path.join(__dirname, req.query.directory);
 
@@ -47,12 +48,17 @@ app.get("/files", (req, res) => {
   res.json(infoArchivos);
 });
 
+app.get("/", (req,res)=>{
+  res.send('./public/welcome.html')
+})
+
 app.get("/changeName",(req,res ) => {
-  var directorio = req.query.directory
+  const dir = req.query.directory
   const nombreArchivoA = req.query.actualName
   const nombreArchivoN = req.query.newName
-  console.log("ENTRE UNA CHIMBA");
-  directorio = path.join(__dirname, directorio);
+  console.log("ENTRE UNA CHIMBA",nombreArchivoA,nombreArchivoN);
+  const directorio = path.join(__dirname, dir);
+  console.log("dir "+directorio);
 
   execSync(`mv ${nombreArchivoA} ${nombreArchivoN}`,{ cwd: directorio});
 

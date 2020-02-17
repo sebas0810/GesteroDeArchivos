@@ -24,8 +24,10 @@ document.querySelector(".info-table").addEventListener("click", event => {
     cambioDirectorio(ruta);
   }
   if(clase === "change-name" ){
+    //console.dir(event.target);
     let padre = event.target.parentElement;
-    let viejo = event.target.nextElementSibling;
+    let viejo = event.target.nextSibling;//event.target.nextElementSibling;
+    //console.dir(viejo);
 
     let nuevo = document.createElement('input');
     nuevo.className= "new-name";
@@ -42,15 +44,20 @@ document.querySelector(".info-table").addEventListener("click", event => {
     padre.replaceChild(nuevoB,viejoB);
   }
   if(clase === "submit-nombre"){
-    console.dir(document.querySelector(".new-name"));
     let nombreNuevo = document.querySelector(".new-name").value
     let nombreViejo = document.querySelector(".new-name").placeholder
-    const ruta = `${directorioRaiz}`;
+    const ruta = `${directorioRaiz}`
 
     console.log(nombreNuevo, nombreViejo, ruta);
 
     cambioNombre(nombreNuevo, nombreViejo, ruta);
     cambioDirectorio(ruta);
+  }
+  if(clase == "delete"){
+    console.dir(event.target.parentElement);
+    const tipo = event.target.parentElement.firstElementChild//.textContent
+    const name = event.target.parentElement//.childNodes(1).lasChild.data
+    console.log(tipo, name);
   }
 });
 
@@ -106,7 +113,8 @@ function renderizarInfo(archivo) {
     <td><button class="change-name">Editar</button>${nombre}</td>
     <td>${tipo}</td>
     <td>${propietario}</td>
-    <td>${permisos}</td>`;
+    <td>${permisos}</td>
+    <td><button class="delete">Eliminar</button></td>`;
 
   fila.innerHTML = info;
 
