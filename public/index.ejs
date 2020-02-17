@@ -7,7 +7,7 @@
       href="https://fonts.googleapis.com/css?family=Roboto&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css" />
+    <link href="styles.css" rel="stylesheet" type="text/css"/>
     <title>Document</title>
   </head>
   <body>
@@ -23,9 +23,14 @@
           </tr>
         </thead>
         <tbody class="imfo-table">
-          <script>
-            infoArchivo
-          </script>
+          <% for(var file of archivos ) { %>
+            <tr>
+              <td><%= file.nombre %></td>
+              <td><%= file.tipo %></td>
+              <td><%= file.propietario %></td>
+              <td><%= file.permisos %></td>
+            </tr>
+          <%}%>
         </tbody>
       </table>
     </div>
