@@ -21,7 +21,6 @@ app.use((request, response, next) => {
 app.use(express.static(path.join(__dirname, "views")));
 
 app.get("/files", (req, res) => {
-  console.log(req.query);
   const directorio = path.join(__dirname, req.query.directory);
 
   // metodo syncrono que espera a que sea completa para seguir
@@ -36,7 +35,7 @@ app.get("/files", (req, res) => {
     let archivo = listaArchivos[i].split(" ");
 
     const infoArchivo = {
-      permisos: archivo[0].slice(""),
+      permisos: archivo[0].slice(1, archivo[0].length - 1),
       tipo: archivo[0].split("")[0],
       propietario: archivo[2],
       nombre: archivo[archivo.length - 1]
@@ -45,6 +44,14 @@ app.get("/files", (req, res) => {
     infoArchivos.push(infoArchivo);
   }
   res.json(infoArchivos);
+});
+
+// Endpoint para crear archivos en la ruta seleccionada
+app.get("/createFile", (req, res) => {
+  const directorio = path.join(__dirname, req.query.directory);
+  const nombreArchivo = req.query.name;
+
+  execSync(`touch ${nombreArchivo}`, { cwd: directorio });
 });
 
 app.listen(8000, (req, res) => {

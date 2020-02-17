@@ -9,6 +9,22 @@ function traerArchivos(directorio) {
     .then(data => data);
 }
 
+function crearArchivo(directorio, nombreArchivo) {
+  return fetch(
+    `http://localhost:8000/createFile?directory=${directorio}&name=${nombreArchivo}`
+  )
+    .then(response => response.json())
+    .then(data => data);
+}
+
+// Evento click que activa la opción de crear un archivo
+document.querySelector(".create-file").addEventListener("click", event => {
+  const directorio = document.querySelector(".folder-name").textContent;
+  const nombreArchivo = document.querySelector(".filename").value;
+
+  crearArchivo(directorio, nombreArchivo);
+});
+
 // Evento click cambio de directorios
 document.querySelector(".info-table").addEventListener("click", event => {
   const clase = event.target.className;
@@ -29,6 +45,7 @@ document.querySelector(".go-back").addEventListener("click", () => {
   irHaciaAtras(directorioRaiz);
 });
 
+// Recibe la ruta y renderiza la ruta ingresada
 function cambioDirectorio(ruta) {
   traerArchivos(ruta).then(archivos => {
     // Borra toda la info residual
