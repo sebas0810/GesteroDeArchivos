@@ -15,12 +15,51 @@ document.querySelector(".info-table").addEventListener("click", event => {
   const proximaRuta = event.target.textContent;
   const directorioRaiz = document.querySelector(".folder-name").textContent;
 
+
+
+
   if (clase === "move-dir") {
     const ruta = `${directorioRaiz}/${proximaRuta}`;
 
     cambioDirectorio(ruta);
   }
+  if(clase === "change-name" ){
+    let padre = event.target.parentElement;
+    let viejo = event.target.nextElementSibling;
+
+    let nuevo = document.createElement('input');
+    nuevo.className= "new-name";
+    nuevo.setAttribute("type","text");
+    nuevo.setAttribute("placeholder",`${viejo.textContent}`);
+
+    padre.replaceChild(nuevo,viejo);
+
+    let viejoB = event.target
+    let nuevoB = document.createElement('button');
+    nuevoB.setAttribute("class","submit-nombre");
+    nuevoB.innerText = "Cambiar";
+
+    padre.replaceChild(nuevoB,viejoB);
+  }
+  if(clase === "submit-nombre"){
+    console.dir(document.querySelector(".new-name"));
+    let nombreNuevo = document.querySelector(".new-name").value
+    let nombreViejo = document.querySelector(".new-name").placeholder
+    const ruta = `${directorioRaiz}`;
+
+    console.log(nombreNuevo, nombreViejo, ruta);
+
+    cambioNombre(nombreNuevo, nombreViejo, ruta);
+    cambioDirectorio(ruta);
+  }
 });
+
+function cambioNombre(nombreNuevo, nombreViejo, ruta){
+  return fetch(`http://localhost:8000/changeName?directory=${ruta}
+    &actualName=${nombreViejo}&newName=${nombreNuevo}`)
+    .then(response => response.json())
+    .then(data => data);
+}
 
 // Evento click para ir hacia el directorio padre
 document.querySelector(".go-back").addEventListener("click", () => {
@@ -52,6 +91,7 @@ function irHaciaAtras(ruta) {
   cambioDirectorio(rutaAnterior);
 }
 
+
 function renderizarInfo(archivo) {
   const tabla = document.querySelector(".info-table");
   let { permisos, tipo, propietario, nombre } = archivo;
@@ -63,7 +103,7 @@ function renderizarInfo(archivo) {
     tipo === "d" ? `<button class="move-dir">${nombre}</button>` : nombre;
 
   const info = `
-    <td>${nombre}</td>
+    <td><button class="change-name">Editar</button>${nombre}</td>
     <td>${tipo}</td>
     <td>${propietario}</td>
     <td>${permisos}</td>`;
