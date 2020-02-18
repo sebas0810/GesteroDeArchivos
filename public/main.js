@@ -34,6 +34,7 @@ document.querySelector(".create-file").addEventListener("click", event => {
   const nombreArchivo = document.querySelector(".filename").value;
 
   crearArchivo(directorio, nombreArchivo);
+  cambioDirectorio(directorio);
 });
 
 document.querySelector(".create-folder").addEventListener("click", event => {
@@ -41,6 +42,7 @@ document.querySelector(".create-folder").addEventListener("click", event => {
   const nombreCarpeta = document.querySelector(".foldername").value;
 
   crearCarpeta(directorio, nombreCarpeta);
+  cambioDirectorio(directorio);
 });
 
 // Evento click cambio de directorios
