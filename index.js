@@ -19,7 +19,7 @@ app.use((request, response, next) => {
   next();
 });
 
-app.use(express.static(path.join(__dirname, "views")));
+app.use(express.static(path.join(__dirname, "public")));
 
 
 app.get("/files", (req, res) => {
@@ -48,21 +48,27 @@ app.get("/files", (req, res) => {
   res.json(infoArchivos);
 });
 
-app.get("/", (req,res)=>{
-  res.send('./public/welcome.html')
-})
+// app.get("/", (req,res)=>{
+//   res.render('welcome')
+// })
 
 app.get("/changeName",(req,res ) => {
   const dir = req.query.directory
-  const nombreArchivoA = req.query.actualName
-  const nombreArchivoN = req.query.newName
-  console.log("ENTRE UNA CHIMBA",nombreArchivoA,nombreArchivoN);
-  const directorio = path.join(__dirname, dir);
-  console.log("dir "+directorio);
+  const directorio = path.join(__dirname+'/',dir.trim());
+  const nombreArchivoA = path.join(directorio,req.query.actualName)
+  const nombreArchivoN = path.join(directorio,req.query.newName)
 
-  execSync(`mv ${nombreArchivoA} ${nombreArchivoN}`,{ cwd: directorio});
+  execSync(`mv ${nombreArchivoA} ${nombreArchivoN}`);
 
-})
+});
+
+app.get("/eliminar",(req,res) =>{
+  const dir = req.query.directory;
+  const directorio = path.join(__dirname+'/',dir.trim());
+  const nombreFD = path.join(directorio,req.query.nameFD)
+
+  execSync(`rm -R ${nombreFD}`);
+});
 
 app.listen(app.get('port'), () => {
     console.log(`server on port ${app.get('port')}`);

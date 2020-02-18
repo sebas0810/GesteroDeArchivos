@@ -44,22 +44,27 @@ document.querySelector(".info-table").addEventListener("click", event => {
     padre.replaceChild(nuevoB,viejoB);
   }
   if(clase === "submit-nombre"){
-    let nombreNuevo = document.querySelector(".new-name").value
-    let nombreViejo = document.querySelector(".new-name").placeholder
-    const ruta = `${directorioRaiz}`
-
-    console.log(nombreNuevo, nombreViejo, ruta);
+    let nombreNuevo = document.querySelector(".new-name").value;
+    let nombreViejo = document.querySelector(".new-name").placeholder;
+    const ruta = `${directorioRaiz}`;
 
     cambioNombre(nombreNuevo, nombreViejo, ruta);
     cambioDirectorio(ruta);
   }
   if(clase == "delete"){
-    console.dir(event.target.parentElement);
-    const tipo = event.target.parentElement.firstElementChild//.textContent
-    const name = event.target.parentElement//.childNodes(1).lasChild.data
-    console.log(tipo, name);
+    const name = event.target.parentElement.parentElement.firstElementChild.lastChild.textContent;
+
+    eliminarFD(name,`${directorioRaiz}`);
+    cambioDirectorio(`${directorioRaiz}`);
   }
 });
+
+function eliminarFD(nombreFD,ruta){
+  return fetch(`http://localhost:8000/eliminar?directory=${ruta}
+    &nameFD=${nombreFD}`)
+    .then(response => response.json())
+    .then(data => data);
+}
 
 function cambioNombre(nombreNuevo, nombreViejo, ruta){
   return fetch(`http://localhost:8000/changeName?directory=${ruta}
