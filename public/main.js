@@ -5,14 +5,14 @@ window.addEventListener("load", () => {
 
 // Funciones
 function traerArchivos(directorio) {
-  return fetch(`http://localhost:8000/files?directory=${directorio}`)
+  return fetch(`/api/files?directory=${directorio}`)
     .then(response => response.json())
     .then(data => data);
 }
 
 function crearArchivo(directorio, nombreArchivo) {
   fetch(
-    `http://localhost:8000/createFile?directory=${directorio}&name=${nombreArchivo}`
+    `/api/createFile?directory=${directorio}&name=${nombreArchivo}`
   )
     .then(response => response.json())
     .then(data => data);
@@ -20,7 +20,7 @@ function crearArchivo(directorio, nombreArchivo) {
 
 function crearCarpeta(directorio, nombreCarpeta) {
   fetch(
-    `http://localhost:8000/createFolder?directory=${directorio}&name=${nombreCarpeta}`
+    `/api/createFolder?directory=${directorio}&name=${nombreCarpeta}`
   )
     .then(response => response.json())
     .then(data => data);
@@ -95,15 +95,62 @@ document.querySelector(".info-table").addEventListener("click", event => {
   }
 });
 
+document.querySelector(".mov-cut").addEventListener("click", event =>{
+  const directorioRaiz = document.querySelector(".folder-name").textContent;
+  const listCheck = document.getElementsByClassName('check');
+  var ElementChecked
+
+  for(var i=0; i<listCheck.length; i++){
+    if(listCheck[i].checked) { ElementChecked = listCheck[i]}
+  }
+  //console.dir(ElementChecked);
+  if(ElementChecked){
+    console.log("Uno seleccionado");
+    if(event.target.textContent == "Mover/Cortar"){
+      event.target.textContent = "Moviendo/Cortando";
+      const name = ElementChecked.parentElement.parentElement.firstElementChild.lastChild.textContent;
+      document.getElementsByClassName('ruta-FD').value = directorioRaiz+"/"+name;
+    }else{
+      event.target.textContent = "Mover/Cortar";
+      const FD = document.getElementsByClassName('ruta-FD').value
+      document.getElementsByClassName('ruta-FD').value = "";
+      console.log("FD: "+FD);
+      const ruta = document.querySelector(".folder-name").textContent;
+
+      moverCortar(FD,ruta);
+      cambioDirectorio(ruta);
+    }
+  }else {
+    if(document.getElementsByClassName('ruta-FD').value != ""){
+      event.target.textContent = "Mover/Cortar";
+      const FD = document.getElementsByClassName('ruta-FD').value
+      document.getElementsByClassName('ruta-FD').value = "";
+      const ruta = document.querySelector(".folder-name").textContent;
+
+      moverCortar(FD.toString(),ruta);
+      cambioDirectorio(ruta);
+    }
+  }
+});
+
+//FD= file/Directory y es la ruta completa del archivo
+function moverCortar(FD,ruta){
+  return fetch(`/api/movercortar?directory=${ruta}
+    &FD=${FD}`)
+    .then(response => response.json())
+    .then(data => data);
+}
+
+
 function eliminarFD(nombreFD,ruta){
-  return fetch(`http://localhost:8000/eliminar?directory=${ruta}
+  return fetch(`/api/eliminar?directory=${ruta}
     &nameFD=${nombreFD}`)
     .then(response => response.json())
     .then(data => data);
 }
 
 function cambioNombre(nombreNuevo, nombreViejo, ruta){
-  return fetch(`http://localhost:8000/changeName?directory=${ruta}
+  return fetch(`/api/changeName?directory=${ruta}
     &actualName=${nombreViejo}&newName=${nombreNuevo}`)
     .then(response => response.json())
     .then(data => data);
@@ -115,6 +162,7 @@ document.querySelector(".go-back").addEventListener("click", () => {
 
   irHaciaAtras(directorioRaiz);
 });
+
 
 // Recibe la ruta y renderiza la ruta ingresada
 function cambioDirectorio(ruta) {
@@ -156,7 +204,9 @@ function renderizarInfo(archivo) {
     <td>${tipo}</td>
     <td>${propietario}</td>
     <td>${permisos}</td>
-    <td><button class="delete">Eliminar</button></td>`;
+    <td><button class="delete">Eliminar</button></td>
+    <td><input type="radio" name="radio1" class="check" /></td>
+    `;
 
   fila.innerHTML = info;
 

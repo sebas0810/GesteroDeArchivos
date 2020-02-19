@@ -22,7 +22,7 @@ app.use((request, response, next) => {
 app.use(express.static(path.join(__dirname, "public")));
 
 
-app.get("/files", (req, res) => {
+app.get("/api/files", (req, res) => {
   const directorio = path.join(__dirname, req.query.directory);
 
   // metodo syncrono que espera a que sea completa para seguir
@@ -48,7 +48,7 @@ app.get("/files", (req, res) => {
   res.json(infoArchivos);
 });
 
-app.get("/changeName",(req,res ) => {
+app.get("/api/changeName",(req,res ) => {
   const dir = req.query.directory
   const directorio = path.join(__dirname+'/',dir.trim());
   const nombreArchivoA = path.join(directorio,req.query.actualName)
@@ -58,7 +58,8 @@ app.get("/changeName",(req,res ) => {
 
 });
 
-app.get("/eliminar",(req,res) =>{
+//Eliminar Files/Directory
+app.get("/api/eliminar",(req,res) =>{
   const dir = req.query.directory;
   const directorio = path.join(__dirname+'/',dir.trim());
   const nombreFD = path.join(directorio,req.query.nameFD)
@@ -66,16 +67,23 @@ app.get("/eliminar",(req,res) =>{
   execSync(`rm -R ${nombreFD}`);
 });
 
+app.get("/api/movercortar",(req,res) =>{
+  const dir = req.query.directory;
+  const directorio = path.join(__dirname+'/',dir.trim());
+  const rutaFD = path.join(__dirname,req.query.FD)
+  console.log(directorio,rutaFD);
+  execSync(`mv ${rutaFD} ${directorio}`);
+});
 
 // Endpoint para crear archivos en la ruta seleccionada
-app.get("/createFile", (req, res) => {
+app.get("/api/createFile", (req, res) => {
   const directorio = path.join(__dirname, req.query.directory);
   const nombreArchivo = req.query.name;
 
   execSync(`touch ${nombreArchivo}`, { cwd: directorio });
 });
 
-app.get("/createFolder", (req, res) => {
+app.get("/api/createFolder", (req, res) => {
   const directorio = path.join(__dirname, req.query.directory);
   const nombreCarpeta = req.query.name;
 
