@@ -22,8 +22,8 @@ app.use((request, response, next) => {
 
 app.use(express.static(path.join(__dirname, "public")));
 
-app.get("/files", (req, res) => {
-  const directorio = path.join(__dirname, req.query.directory);
+app.get("/api/files", (req, res) => {
+  const directorio = path.join(req.query.directory);
 
   // metodo syncrono que espera a que sea completa para seguir
   const resultado = execSync("ls -l", { cwd: directorio }).toString();
@@ -48,38 +48,51 @@ app.get("/files", (req, res) => {
   res.json(infoArchivos);
 });
 
-app.get("/changeName", (req, res) => {
+app.get("/api/changeName", (req, res) => {
   const dir = req.query.directory;
-  const directorio = path.join(__dirname + "/", dir.trim());
+  const directorio = path.join("/", dir.trim());
   const nombreArchivoA = path.join(directorio, req.query.actualName);
   const nombreArchivoN = path.join(directorio, req.query.newName);
 
   execSync(`mv ${nombreArchivoA} ${nombreArchivoN}`);
 });
 
-app.get("/eliminar", (req, res) => {
+//Eliminar Files/Directory
+app.get("/api/eliminar", (req, res) => {
   const dir = req.query.directory;
-  const directorio = path.join(__dirname + "/", dir.trim());
+  const directorio = path.join("/", dir.trim());
   const nombreFD = path.join(directorio, req.query.nameFD);
 
   execSync(`rm -R ${nombreFD}`);
 });
 
-app.get("/changeFileOwner", (req, res) => {
-  const propietario = req.body.ownerName;
-  const archivo = req.body.file;
+app.get("/api/movercortar", (req, res) => {
+  const dir = req.query.directory;
+  const directorio = path.join("/", dir.trim());
+  const rutaFD = path.join(req.query.FD);
+  console.log(directorio, rutaFD);
+  execSync(`mv ${rutaFD} ${directorio}`);
+});
+
+app.get("/api/copiarpegar", (req, res) => {
+  const dir = req.query.directory;
+  const directorio = path.join("/", dir.trim());
+  const rutaFD = path.join(req.query.FD);
+  console.log(directorio, rutaFD);
+
+  execSync(`cp -r ${rutaFD} ${directorio}`);
 });
 
 // Endpoint para crear archivos en la ruta seleccionada
-app.get("/createFile", (req, res) => {
-  const directorio = path.join(__dirname, req.query.directory);
+app.get("/api/createFile", (req, res) => {
+  const directorio = path.join(req.query.directory);
   const nombreArchivo = req.query.name;
 
   execSync(`touch ${nombreArchivo}`, { cwd: directorio });
 });
 
-app.get("/createFolder", (req, res) => {
-  const directorio = path.join(__dirname, req.query.directory);
+app.get("/api/createFolder", (req, res) => {
+  const directorio = path.join(req.query.directory);
   const nombreCarpeta = req.query.name;
 
   execSync(`mkdir ${nombreCarpeta}`, { cwd: directorio });

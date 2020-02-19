@@ -17,12 +17,18 @@
         <button class="go-back">Ir atras</button>
         <input type="text" placeholder="nombre del archivo" class="filename" />
         <button class="create-file">Crear archivos</button>
+        <input type="hidden" class="ruta-FD" value="" />
         <input
           type="text"
           placeholder="nombre de la carpeta"
           class="foldername"
         />
         <button class="create-folder">Crear carpetas</button>
+      </div>
+      <div>
+        <button id="movcut" class="mov-cut">Mover/Cortar</button>
+        <button id="cop" class="cop">Copiar</button>
+        <button id="pas" class="pas">Pegar</button>
       </div>
       <table class="files">
         <thead>
@@ -31,7 +37,8 @@
             <th>Tipo</th>
             <th>Propietario</th>
             <th>Permisos</th>
-            <th>Eliminar></th>
+            <th>Eliminar</th>
+            <th>Seleccionar</th>
           </tr>
         </thead>
         <tbody class="info-table"></tbody>
