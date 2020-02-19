@@ -3,8 +3,9 @@ const morgan = require("morgan");
 const path = require("path");
 const { exec, execSync } = require("child_process");
 const app = express();
+const fs = require("fs");
 
-app.set('port', 8000)
+app.set("port", 8000);
 
 app.use(morgan("dev"));
 app.use(express.json());
@@ -20,7 +21,6 @@ app.use((request, response, next) => {
 });
 
 app.use(express.static(path.join(__dirname, "public")));
-
 
 app.get("/files", (req, res) => {
   const directorio = path.join(__dirname, req.query.directory);
@@ -48,24 +48,27 @@ app.get("/files", (req, res) => {
   res.json(infoArchivos);
 });
 
-app.get("/changeName",(req,res ) => {
-  const dir = req.query.directory
-  const directorio = path.join(__dirname+'/',dir.trim());
-  const nombreArchivoA = path.join(directorio,req.query.actualName)
-  const nombreArchivoN = path.join(directorio,req.query.newName)
+app.get("/changeName", (req, res) => {
+  const dir = req.query.directory;
+  const directorio = path.join(__dirname + "/", dir.trim());
+  const nombreArchivoA = path.join(directorio, req.query.actualName);
+  const nombreArchivoN = path.join(directorio, req.query.newName);
 
   execSync(`mv ${nombreArchivoA} ${nombreArchivoN}`);
-
 });
 
-app.get("/eliminar",(req,res) =>{
+app.get("/eliminar", (req, res) => {
   const dir = req.query.directory;
-  const directorio = path.join(__dirname+'/',dir.trim());
-  const nombreFD = path.join(directorio,req.query.nameFD)
+  const directorio = path.join(__dirname + "/", dir.trim());
+  const nombreFD = path.join(directorio, req.query.nameFD);
 
   execSync(`rm -R ${nombreFD}`);
 });
 
+app.get("/changeFileOwner", (req, res) => {
+  const propietario = req.body.ownerName;
+  const archivo = req.body.file;
+});
 
 // Endpoint para crear archivos en la ruta seleccionada
 app.get("/createFile", (req, res) => {
@@ -82,6 +85,6 @@ app.get("/createFolder", (req, res) => {
   execSync(`mkdir ${nombreCarpeta}`, { cwd: directorio });
 });
 
-app.listen(app.get('port'), () => {
-  console.log(`server on port ${app.get('port')}`);
+app.listen(app.get("port"), () => {
+  console.log(`server on port ${app.get("port")}`);
 });
