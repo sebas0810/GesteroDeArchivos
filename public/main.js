@@ -95,9 +95,9 @@ document.querySelector(".info-table").addEventListener("click", event => {
     cambiarPropietarioArchivo(nombrePropietario, archivo);
   } else if (clase === "change-mode") {
     const nuevoHijo = document.createElement("input"); // entrada de texto
-    nuevoHijo.className = "owner-name";
+    nuevoHijo.className = "mode";
     nuevoHijo.setAttribute("type", "text");
-    nuevoHijo.setAttribute("placeholder", "Nombre propietario");
+    nuevoHijo.setAttribute("placeholder", "Permisos");
 
     const nodoPadre = event.target.parentElement; // dato de la fila (td)
     const hijoAnterior = event.target.nextSibling; // texto, nodo posterior
@@ -108,13 +108,13 @@ document.querySelector(".info-table").addEventListener("click", event => {
 
     // Cambio boton
     event.target.innerText = "Cambiar modo";
-    event.target.className = "submit-owner";
+    event.target.className = "submit-mode";
   } else if (clase === "submit-mode") {
-    const nombrePropietario = event.target.nextSibling.value;
+    const modo = event.target.nextSibling.value;
 
     const nodoPadre = event.target.parentElement;
     const hijoAnterior = event.target.nextSibling;
-    const nuevoHijo = document.createTextNode(nombrePropietario);
+    const nuevoHijo = document.createTextNode(modo);
 
     // Cambio de entrada a texto
     nodoPadre.replaceChild(nuevoHijo, hijoAnterior);
