@@ -1,6 +1,6 @@
 // Espera a que el documento se cargue para ejecutar el callback
 window.addEventListener("load", () => {
-  cambioDirectorio("home");
+  cambioDirectorio("/home");
 });
 
 // Funciones
@@ -171,9 +171,10 @@ document.querySelector(".submit").addEventListener("click", event => {
       grupo.write +
       grupo.execute}${otros.read + otros.write + otros.execute}`
   );
-
-  const directorio = `${ruta}/${nombreArchivo}`;
-  cambiarPermisosArchivo(directorio, permiso);
+  const directorioRaiz = `${ruta}/${nombreArchivo}`
+  console.log(directorioRaiz)
+  cambiarPermisosArchivo(directorioRaiz, permiso);
+  cambioDirectorio(ruta)
 });
 
 document.querySelector(".mode-buttons").addEventListener("click", event => {

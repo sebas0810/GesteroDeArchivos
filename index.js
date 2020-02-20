@@ -88,8 +88,7 @@ app.get("/api/changeFilePermissions", (req, res) => {
   const directorio = path.join(__dirname, file);
 
   exec(
-    `chmod ${mode} ${directorio}`,
-    { cwd: directorio },
+    `chmod ${mode} ${file}`,
     (error, stdout, stderr) => {
       if (error) {
         console.log(error);
