@@ -1,6 +1,6 @@
 // Espera a que el documento se cargue para ejecutar el callback
 window.addEventListener("load", () => {
-  cambioDirectorio("home");
+  cambioDirectorio("/home");
 });
 
 // Funciones
