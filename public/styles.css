@@ -48,3 +48,39 @@ body {
 #movcut {
   margin-bottom: 30px;
 }
+
+.mode-buttons {
+  display: inline-block;
+  background: linear-gradient(60deg, #ab47bc, #8e24aa);
+  border-radius: 0.25rem;
+  color: white;
+  width: 300px;
+  padding: 20px;
+}
+
+#btn {
+  background: white;
+  border: none;
+  padding: 10px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.active {
+  background: rgb(156, 151, 151);
+}
+
+.change-mode-title {
+  font-size: 22px;
+  padding: 0;
+}
+
+.selected-file {
+  background: white;
+  border-radius: 0.25rem;
+  color: black;
+  font-size: 15px;
+  padding: 5px;
+  margin-bottom: 15px;
+}

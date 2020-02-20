@@ -1,6 +1,6 @@
 // Espera a que el documento se cargue para ejecutar el callback
 window.addEventListener("load", () => {
-  cambioDirectorio("/home");
+  cambioDirectorio("home");
 });
 
 // Funciones
@@ -93,39 +93,12 @@ document.querySelector(".info-table").addEventListener("click", event => {
     const archivo = nodoPadre.parentElement.children[0].lastChild.textContent;
 
     cambiarPropietarioArchivo(nombrePropietario, archivo);
-  } else if (clase === "change-mode") {
-    const nuevoHijo = document.createElement("input"); // entrada de texto
-    nuevoHijo.className = "owner-name";
-    nuevoHijo.setAttribute("type", "text");
-    nuevoHijo.setAttribute("placeholder", "Nombre propietario");
+  } else if (clase === "change-mode" && event.target.checked) {
+    const nombreArchivo =
+      event.target.parentElement.parentElement.children[0].lastChild;
 
-    const nodoPadre = event.target.parentElement; // dato de la fila (td)
-    const hijoAnterior = event.target.nextSibling; // texto, nodo posterior
-    console.log(hijoAnterior);
-
-    // Cambio de texto a entrada
-    const hijoReemplazado = nodoPadre.replaceChild(nuevoHijo, hijoAnterior);
-
-    // Cambio boton
-    event.target.innerText = "Cambiar modo";
-    event.target.className = "submit-owner";
-  } else if (clase === "submit-mode") {
-    const nombrePropietario = event.target.nextSibling.value;
-
-    const nodoPadre = event.target.parentElement;
-    const hijoAnterior = event.target.nextSibling;
-    const nuevoHijo = document.createTextNode(nombrePropietario);
-
-    // Cambio de entrada a texto
-    nodoPadre.replaceChild(nuevoHijo, hijoAnterior);
-
-    // Cambio del boton
-    event.target.innerText = "Editar";
-    event.target.className = "change-mode";
-
-    const archivo = nodoPadre.parentElement.children[0].lastChild.textContent;
-
-    cambiarPropietarioArchivo(nombrePropietario, archivo);
+    const archivoSeleccionado = document.querySelector(".selected-file");
+    archivoSeleccionado.textContent = nombreArchivo.textContent;
   }
   if (clase === "change-name") {
     //console.dir(event.target);
@@ -165,6 +138,56 @@ document.querySelector(".info-table").addEventListener("click", event => {
   }
 });
 
+document.querySelector(".submit").addEventListener("click", event => {
+  const nombreArchivo = document.querySelector(".selected-file").textContent;
+  const ruta = document.querySelector(".folder-name").textContent;
+
+  const modoUsuario = document.querySelector(".user-mode");
+  const modoGrupo = document.querySelector(".group-mode");
+  const modoOtros = document.querySelector(".others-mode");
+
+  const modo = {
+    usuario: {
+      read: modoUsuario.children[0].className.includes("active") ? 4 : 0,
+      write: modoUsuario.children[1].className.includes("active") ? 2 : 0,
+      execute: modoUsuario.children[2].className.includes("active") ? 1 : 0
+    },
+    grupo: {
+      read: modoGrupo.children[0].className.includes("active") ? 4 : 0,
+      write: modoGrupo.children[1].className.includes("active") ? 2 : 0,
+      execute: modoGrupo.children[2].className.includes("active") ? 1 : 0
+    },
+    otros: {
+      read: modoOtros.children[0].className.includes("active") ? 4 : 0,
+      write: modoOtros.children[1].className.includes("active") ? 2 : 0,
+      execute: modoOtros.children[2].className.includes("active") ? 1 : 0
+    }
+  };
+
+  const { usuario, grupo, otros } = modo;
+
+  const permiso = parseInt(
+    `${usuario.read + usuario.write + usuario.execute}${grupo.read +
+      grupo.write +
+      grupo.execute}${otros.read + otros.write + otros.execute}`
+  );
+
+  const directorio = `${ruta}/${nombreArchivo}`;
+  cambiarPermisosArchivo(directorio, permiso);
+});
+
+document.querySelector(".mode-buttons").addEventListener("click", event => {
+  const clase = Array.from(event.target.classList);
+
+  if (event.target.id === "btn" && clase.includes("active")) {
+    event.target.classList.remove("active");
+    event.target.style.background = "white";
+  } else if (event.target.id === "btn") {
+    event.target.classList.add("active");
+    event.target.style.background = "#fffa";
+  }
+});
+
 document.querySelector(".cop").addEventListener("click", event => {
   const directorioRaiz = document.querySelector(".folder-name").textContent;
   const listCheck = document.getElementsByClassName("check");
@@ -195,23 +218,6 @@ document.querySelector(".pas").addEventListener("click", event => {
   copiarPegar(FD, ruta);
   cambioDirectorio2(FD, ruta);
 });
-
-function cambioDirectorio2(FD, ruta) {
-  cambioDirectorio(ruta);
-  console.log("Pasara " + FD);
-  document.getElementsByClassName("ruta-FD").placeholder = FD;
-  console.log(
-    "EntroCambio2 " + document.getElementsByClassName("ruta-FD").placeholder
-  );
-}
-
-function copiarPegar(FD, ruta) {
-  return fetch(`/api/copiarpegar?directory=${ruta}
-    &FD=${FD}`)
-    .then(response => response.json())
-    .then(data => data);
-}
-
 //accion de mover y cortar
 document.querySelector(".mov-cut").addEventListener("click", event => {
   const directorioRaiz = document.querySelector(".folder-name").textContent;
@@ -256,6 +262,22 @@ document.querySelector(".mov-cut").addEventListener("click", event => {
   }
 });
 
+function cambioDirectorio2(FD, ruta) {
+  cambioDirectorio(ruta);
+  console.log("Pasara " + FD);
+  document.getElementsByClassName("ruta-FD").placeholder = FD;
+  console.log(
+    "EntroCambio2 " + document.getElementsByClassName("ruta-FD").placeholder
+  );
+}
+
+function copiarPegar(FD, ruta) {
+  return fetch(`/api/copiarpegar?directory=${ruta}
+    &FD=${FD}`)
+    .then(response => response.json())
+    .then(data => data);
+}
+
 //FD= file/Directory y es la ruta completa del archivo
 function moverCortar(FD, ruta) {
   return fetch(`/api/movercortar?directory=${ruta}
@@ -287,9 +309,11 @@ function cambiarPropietarioArchivo(nombrePropietario, archivo) {
 }
 
 function cambiarPermisosArchivo(archivo, modo) {
-  fetch(`http://localhost:8000/changeFilePermissions?file=${archivo}&mode=${modo}`)
-  .then(response => response.json())
-  .then(data => data)
+  fetch(
+    `http://localhost:8000/api/changeFilePermissions?fileRoute=${archivo}&mode=${modo}`
+  )
+    .then(response => response.json())
+    .then(data => data);
 }
 // Recibe la ruta y renderiza la ruta ingresada
 function cambioDirectorio(ruta) {
@@ -333,7 +357,7 @@ function renderizarInfo(archivo) {
     <td><button class="change-name">Editar</button>${nombre}</td>
     <td>${tipo}</td>
     <td><button class="change-owner">Editar</button>${propietario}</td>
-    <td><button class="change-mode">Editar</button>${permisos}</td>
+    <td><input type="radio" class="change-mode" name="chmod">${permisos}</td>
     <td><button class="delete">Eliminar</button></td>
     <td><input type="radio" name="radio1" class="check" /></td>
     `;
