@@ -98,6 +98,13 @@ app.get("/api/createFolder", (req, res) => {
   execSync(`mkdir ${nombreCarpeta}`, { cwd: directorio });
 });
 
+app.get('/api/changePermissions', (req, res) => {
+  const archivo = req.body.file
+  const modo = req.body.mode
+
+  execSync(`chmod ${modo} ${archivo}`)
+})
+
 app.listen(app.get("port"), () => {
   console.log(`server on port ${app.get("port")}`);
 });
