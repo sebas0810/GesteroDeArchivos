@@ -83,7 +83,27 @@ app.get("/api/copiarpegar", (req, res) => {
   execSync(`cp -r ${rutaFD} ${directorio}`);
 });
 
-// Endpoint para crear archivos en la ruta seleccionada
+app.get("/api/changeFilePermissions", (req, res) => {
+  const { file, mode } = req.query;
+  const directorio = path.join(__dirname, file);
+
+  exec(
+    `chmod ${mode} ${file}`,
+    (error, stdout, stderr) => {
+      if (error) {
+        console.log(error);
+        res.json({
+          message:
+            "Lo siento parece que no se puede cambiar los permisos del archivo"
+        });
+      }
+      return res.status(200).json({
+        message: `El propietario del archivo/directorio ${file} fue cambiado exitosamente`
+      });
+    }
+  );
+});
+
 app.get("/api/createFile", (req, res) => {
   const directorio = path.join(req.query.directory);
   const nombreArchivo = req.query.name;

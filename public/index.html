@@ -7,7 +7,7 @@
       href="https://fonts.googleapis.com/css?family=Roboto&display=swap"
       rel="stylesheet"
     />
-    <link href="styles.css" rel="stylesheet" type="text/css"/>
+    <link href="styles.css" rel="stylesheet" type="text/css" />
     <title>Document</title>
   </head>
   <body>
@@ -43,6 +43,28 @@
         </thead>
         <tbody class="info-table"></tbody>
       </table>
+      <div class="mode-buttons">
+        <div class="selected-file"></div>
+        <div class="user-mode">
+          USER
+          <button id="btn" class="user-r">r</button>
+          <button id="btn" class="user-w">w</button>
+          <button id="btn" class="user-x">x</button>
+        </div>
+        <div class="group-mode">
+          GROUP
+          <button id="btn" class="group-r">r</button>
+          <button id="btn" class="group-w">w</button>
+          <button id="btn" class="group-x">x</button>
+        </div>
+        <div class="others-mode">
+          OTHERS
+          <button id="btn" class="others-r">r</button>
+          <button id="btn" class="others-w">w</button>
+          <button id="btn" class="others-x">x</button>
+        </div>
+        <button class="submit">Enviar</button>
+      </div>
     </div>
     <script src="main.js"></script>
   </body>
