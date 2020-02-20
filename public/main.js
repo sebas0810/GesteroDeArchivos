@@ -310,7 +310,7 @@ function cambiarPropietarioArchivo(nombrePropietario, archivo) {
 
 function cambiarPermisosArchivo(archivo, modo) {
   fetch(
-    `http://localhost:8000/api/changeFilePermissions?fileRoute=${archivo}&mode=${modo}`
+    `http://localhost:8000/api/changeFilePermissions?file=${archivo}&mode=${modo}`
   )
     .then(response => response.json())
     .then(data => data);

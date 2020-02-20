@@ -23,7 +23,7 @@ app.use((request, response, next) => {
 app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/api/files", (req, res) => {
-  const directorio = path.join(__dirname, req.query.directory);
+  const directorio = path.join(req.query.directory);
 
   // metodo syncrono que espera a que sea completa para seguir
   const resultado = execSync("ls -l", { cwd: directorio }).toString();
@@ -84,8 +84,8 @@ app.get("/api/copiarpegar", (req, res) => {
 });
 
 app.get("/api/changeFilePermissions", (req, res) => {
-  const { fileRoute, mode } = req.query;
-  const directorio = path.join(__dirname, fileRoute);
+  const { file, mode } = req.query;
+  const directorio = path.join(__dirname, file);
 
   exec(
     `chmod ${mode} ${directorio}`,
@@ -99,7 +99,7 @@ app.get("/api/changeFilePermissions", (req, res) => {
         });
       }
       return res.status(200).json({
-        message: `El propietario del archivo/directorio ${fileRoute} fue cambiado exitosamente`
+        message: `El propietario del archivo/directorio ${file} fue cambiado exitosamente`
       });
     }
   );
